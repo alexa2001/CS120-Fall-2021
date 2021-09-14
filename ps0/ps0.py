@@ -34,9 +34,15 @@ def calculate_size(T):
     # The return value is up to you
     
     # Your code goes here
-    pass
+    T.temp = 1
+    if T.left:
+        calculate_size(T.left)
+        T.temp += calculate_size(T.left).temp
 
-
+    if T.right:
+        calculate_size(T.right)
+        T.temp += calculate_size(T.right).temp
+    return T 
 
 #
 # Problem 3
@@ -51,6 +57,27 @@ def FindSubtree(T, L, U):
     # The return value is a subtree that meets the constraints
 
     # Your code goes here
-    pass
+
+    tree = calculate_size(T)
+    return checkTree(tree, L, U)
+    
+    
+def checkTree(T, L, U):
+    if T.left: #if left subtree exists
+        if T.left.temp >= L and T.left.temp <= U: #if size(left subtree) is in interval [L, U] return subtree
+            subtree = T.left 
+            T.left = None
+            return subtree
+        else:
+            return FindSubtree(T.left, L, U) #keep searching in left subtree
+    elif T.right: #if right subtree exists
+        if T.right.temp >= L and T.right.temp <= U: #if size(right subtree) is in interval [L, U] return subtree
+            subtree = T.right
+            T.right = None
+            return subtree
+        else:
+            return FindSubtree(T.right, L, U) #keep searching in right subtree
+
+    return None
 
 
